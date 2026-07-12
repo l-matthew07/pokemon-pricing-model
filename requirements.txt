@@ -5,6 +5,7 @@ lxml>=5.0
 PyYAML>=6.0
 python-dotenv>=1.0
 pytrends>=4.9
+pandas>=2.0
 tenacity>=8.2
 click>=8.1
 pytest>=8.0
