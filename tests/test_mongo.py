@@ -20,6 +20,21 @@ def db():
     return database
 
 
+def test_upsert_product_normalizes_bare_date_fields_to_datetime(db):
+    # Real pymongo/BSON can't encode a bare datetime.date (only datetime.datetime) —
+    # mongomock is more lenient and would silently accept either, so this asserts
+    # the actual stored type rather than just that the write succeeded.
+    upsert_product(db, {
+        "_id": "prismatic-evolutions-etb",
+        "release_date": date(2025, 1, 17),
+        "jp_release_date": date(2025, 1, 24),
+    })
+    doc = db.products.find_one({"_id": "prismatic-evolutions-etb"})
+    assert type(doc["release_date"]) is datetime
+    assert doc["release_date"] == datetime(2025, 1, 17)
+    assert type(doc["jp_release_date"]) is datetime
+
+
 def test_upsert_product_inserts_then_updates(db):
     upsert_product(db, {"_id": "prismatic-evolutions-etb", "set_name": "Prismatic Evolutions", "msrp": 79.99})
     assert db.products.count_documents({}) == 1

@@ -64,9 +64,25 @@ def _normalize_date(value: date | datetime) -> datetime:
     return datetime(value.year, value.month, value.day)
 
 
+def _normalize_dates_in_doc(doc: dict) -> dict:
+    """Convert any bare `date` values (as opposed to `datetime`) in a document
+    to midnight datetimes, since BSON/pymongo can only encode `datetime`.
+    Order matters: `datetime` is a subclass of `date`, so it's checked first.
+    """
+    result = {}
+    for key, value in doc.items():
+        if isinstance(value, datetime):
+            result[key] = value
+        elif isinstance(value, date):
+            result[key] = _normalize_date(value)
+        else:
+            result[key] = value
+    return result
+
+
 def upsert_product(db: Database, product: dict) -> None:
     """Upsert a products document, keyed on _id."""
-    doc = dict(product)
+    doc = _normalize_dates_in_doc(product)
     product_id = doc.pop("_id")
     db.products.update_one({"_id": product_id}, {"$set": doc}, upsert=True)
     log.debug("Upserted product %s", product_id)
@@ -74,8 +90,7 @@ def upsert_product(db: Database, product: dict) -> None:
 
 def upsert_price_snapshot(db: Database, snapshot: dict) -> None:
     """Upsert a price_snapshots document, keyed on (product_id, date, price_type, source)."""
-    doc = dict(snapshot)
-    doc["date"] = _normalize_date(doc["date"])
+    doc = _normalize_dates_in_doc(snapshot)
     key = {
         "product_id": doc["product_id"],
         "date": doc["date"],
@@ -88,8 +103,7 @@ def upsert_price_snapshot(db: Database, snapshot: dict) -> None:
 
 def upsert_scarcity_signal(db: Database, signal: dict) -> None:
     """Upsert a scarcity_signals document, keyed on (product_id, date, signal_type, source)."""
-    doc = dict(signal)
-    doc["date"] = _normalize_date(doc["date"])
+    doc = _normalize_dates_in_doc(signal)
     key = {
         "product_id": doc["product_id"],
         "date": doc["date"],

@@ -1,0 +1,49 @@
+# Pokemon ETB pricing pipeline config.
+#
+# Add a new ETB by adding an entry to `products` below — no code changes
+# needed. See README.md for a full field reference and how to find each
+# source URL/ID.
+#
+# Fields left unset (release_date, set_size, jp_release_date) will be
+# filled in automatically by sources/wiki_metadata.py from Bulbapedia on
+# the next run. Fields you DO set here always take precedence over
+# whatever gets scraped.
+
+products:
+  - id: prismatic-evolutions-etb
+    set_name: "Prismatic Evolutions"
+    msrp: 79.99
+    specialty_set_flag: true
+    box_art_pokemon: "Umbreon"
+    new_mechanic_flag: false
+    google_trends_query: "Prismatic Evolutions ETB"
+    source_urls:
+      bulbapedia: "https://bulbapedia.bulbagarden.net/wiki/Prismatic_Evolutions_(TCG)"
+      pricecharting:
+        # TODO: replace with the real PriceCharting product page for this ETB.
+        # Find it by searching https://www.pricecharting.com/search-products?type=prices&q=<set+name>+elite+trainer+box
+        # `label` must exactly match one of the column headers on that page
+        # (e.g. "Ungraded", "Grade 9", "PSA 10") — open the page and check.
+        etb_sealed:
+          url: "https://www.pricecharting.com/game/REPLACE-ME/elite-trainer-box"
+          label: "Ungraded"
+      # tcgplayer and onepthirty/psa_pop are optional per product — see README.
+      # tcgplayer:
+      #   etb_sealed:
+      #     product_id: 000000
+      # (onepthirty and psa_pop need no config here: they read manual_data/*.csv rows
+      # keyed by this product's `id`.)
+
+  - id: surging-sparks-etb
+    set_name: "Surging Sparks"
+    msrp: 79.99
+    specialty_set_flag: false
+    box_art_pokemon: "Pikachu"
+    new_mechanic_flag: false
+    google_trends_query: "Surging Sparks ETB"
+    source_urls:
+      bulbapedia: "https://bulbapedia.bulbagarden.net/wiki/Surging_Sparks_(TCG)"
+      pricecharting:
+        etb_sealed:
+          url: "https://www.pricecharting.com/game/REPLACE-ME/elite-trainer-box"
+          label: "Ungraded"
