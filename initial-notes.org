@@ -1,0 +1,64 @@
+#+title: Initial Notes
+
+* Pokemon ETB Pricing Model
+
+** Background: Sets and Eras
+- Era :: modeled after mainline games, ~2-3 years long, ~15-16 sets per era
+- Set :: released every ~2-3 months; determines pack contents/appearance
+- Every card belongs to exactly one set, *except* promos
+  - Promos aren't pulled from packs; you get them by buying the box/product they're bundled with (e.g. an ETB)
+
+** Elite Trainer Box (ETB)
+- The "holy grail" product; every set has one (some have two designs, similarly priced)
+- Contents: 9 packs + 1 promo
+- MSRP: ~$80-90
+- Popular because it's compact, easy to store, and has unique box art
+- The bundled promo can significantly drive ETB value
+- Alternatives: booster boxes (36 packs, expensive), booster bundles (6 packs, cheaper)
+
+** Market Structure
+- No institutional investors -> high volatility, emotion-driven pricing
+- MSRP vs. Market Price (MP) can diverge significantly ("spread")
+- Assumption: divergence implies a future correction
+  - Caveat (raised in discussion): this assumption isn't guaranteed. A model can be arbitrarily good and still be wrong if the correction never materializes, or if a correction elsewhere (e.g. in the underlying set value) breaks the model's other predictors.
+- ETB vs. single card volatility:
+  - An ETB behaves like an index fund / ETF for the whole set
+  - Individual cards can spike/crash on short-term hype and mass buy-then-sell behavior
+  - ETBs are harder to manipulate (less concentrated demand, harder to generate sustained hype for an entire set vs. one card)
+  - Open question: how does the model account for this residual volatility? (unresolved in the conversation)
+
+** Grading (PSA) Background
+- PSA = most common grading company; grades individual raw cards 1-10
+- PSA 10 = gem mint condition
+- Key nuance: grading is *per physical copy*, not per card design
+  - Two copies of the same card can receive different grades
+  - A card can be handled perfectly and still not get a 10 (factors like factory centering are out of the owner's control)
+- Gem rate :: probability an untouched/raw copy of a given card grades a PSA 10
+  - Varies by card for reasons that aren't fully understood/explained
+- Model uses *price of a PSA 10*, not gem rate, as the predictor
+  - Price and gem rate are correlated, but price is more directly observable/reliable
+  - Logic: price of a PSA 10 promo -> reflects how hard it is to pull a pristine copy -> raises value of the ETB (since the ETB is often the only way to get that promo untouched)
+
+** Proposed Model
+- Type: log-adjusted linear regression (i.e., linear regression on log-transformed variables)
+- Rationale: predictors are believed to interact *multiplicatively*, not additively
+  - Example: halving an ETB's print run is expected to multiply (double/triple/etc.) its price, not just add a fixed amount
+  - Log transform converts multiplicative relationships into additive ones, making them tractable for linear regression
+
+** Predictors
+1. Price of a PSA 10 (of the set's promo/chase card)
+2. Price of the promo (raw/ungraded)
+3. Inherent value of a loose booster pack from the set
+   - Logic: ETB price has a floor = value of promo + value of packs it contains, plus a premium for being sealed/collectible
+4. Print run of the ETB
+   - Lower print run -> scarcer -> higher price, all else equal
+5. Specialty set flag (qualitative/binary)
+   - A set is either "regular" or "specialty" (Pokemon designates this explicitly, not ambiguous)
+   - Specialty sets have some distinguishing feature (e.g., shiny-card sets, larger card counts, etc.)
+   - Key implication: specialty sets typically do *not* get a booster box
+     - This makes the ETB the highest-pack-count product available for that set
+     - Increases relative importance/demand for the ETB specifically
+** Open Questions / Unresolved
+- How to formally account for short-term speculative volatility/hype cycles in the model
+- How to handle correction risk in one predictor (e.g., set value) propagating error into the model's other estimates
+- Whether gem rate should be incorporated as a secondary variable despite using PSA 10 price as primary
