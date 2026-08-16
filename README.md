@@ -1,4 +1,5 @@
 # Pokemon ETB Pricing Data Pipeline
+ML and CP
 
 Collects weekly pricing and metadata for Pokemon Elite Trainer Boxes (ETBs)
 into MongoDB, for a personal research project modeling ETB market price vs.
