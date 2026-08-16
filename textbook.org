@@ -1,0 +1,13 @@
+#+title: Textbook
+
+* Chapter 1
+- statistical learning = tools
+  - supervised, unsupervised for understanding data
+- supservised = building model for predicting/estimating output based on 1+ inputs
+- unsupeervised = inputs, no output
+
+** Wage Data
+- want to understand association between employee's age and education and calendar year on his wage
+- wage increases with age, then decreases again after age 60
+- predicts /continuous/ or /quantitative/ output vlaue, referrred to as *regression* problem
+  

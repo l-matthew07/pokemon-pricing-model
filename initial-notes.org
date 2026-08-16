@@ -58,6 +58,8 @@
    - Key implication: specialty sets typically do *not* get a booster box
      - This makes the ETB the highest-pack-count product available for that set
      - Increases relative importance/demand for the ETB specifically
+6. time since release
+   - the longer it's been out, the less unopened boxes tehre are
 ** Open Questions / Unresolved
 - How to formally account for short-term speculative volatility/hype cycles in the model
 - How to handle correction risk in one predictor (e.g., set value) propagating error into the model's other estimates
