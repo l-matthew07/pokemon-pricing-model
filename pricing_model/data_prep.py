@@ -101,7 +101,7 @@ def prepare_model_data(df):
     # values — so that version has to survive past this function too,
     # not just the demeaned arrays above.
     logged_data = df[
-        [config.SET_ID_COL, config.WEEK_COL, outcome_log_col] + predictor_log_cols
+        [config.SET_ID_COL, config.WEEK_COL, config.OUTCOME_COL, outcome_log_col] + predictor_log_cols
     ].copy()
 
     return {
